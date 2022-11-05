@@ -1,25 +1,19 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:student_manager/screens/home_screen.dart';
-
-class SplashSreen extends StatefulWidget {
+import 'package:provider/provider.dart';
+import 'package:student_manager/provider/student_provider.dart';
+class SplashSreen extends StatelessWidget {
   const SplashSreen({Key? key}) : super(key: key);
 
-  @override
-  State<SplashSreen> createState() => _SplashSreenState();
-}
-
-class _SplashSreenState extends State<SplashSreen> {
-  @override
-  void initState() {
-    gotoHome();
-    super.initState();
-  }
+  //@override
+  // void initState() {
+  //   gotoHome();
+  //   super.initState();
+  // }
 
   @override
-   Widget build(BuildContext context) {
+  Widget build(BuildContext context) {
+    Provider.of<StudentProvider>(context).splsh(context);
     return Scaffold(
       body: Center(
         child: Column(
@@ -50,7 +44,7 @@ class _SplashSreenState extends State<SplashSreen> {
             ),
             Container(
               child: LoadingAnimationWidget.flickr(
-                  leftDotColor:const  Color.fromARGB(255, 255, 132, 0),
+                  leftDotColor: const Color.fromARGB(255, 255, 132, 0),
                   rightDotColor: Colors.blue,
                   size: 50),
             ),
@@ -60,16 +54,16 @@ class _SplashSreenState extends State<SplashSreen> {
     );
   }
 
-  Future<void> gotoHome() async {
-    await Future.delayed(
-      const Duration(seconds: 3),
-    );
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(
-        builder: (ctx) {
-          return  const HomeScreen();
-        },
-      ),
-    );
-  }
+  // Future<void> gotoHome() async {
+  //   await Future.delayed(
+  //     const Duration(seconds: 3),
+  //   );
+  //   Navigator.of(context).pushReplacement(
+  //     MaterialPageRoute(
+  //       builder: (ctx) {
+  //         return  const HomeScreen();
+  //       },
+  //     ),
+  //   );
+  // }
 }
