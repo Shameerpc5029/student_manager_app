@@ -77,6 +77,7 @@ class StudentList extends StatelessWidget {
                       onTap: () {
                         showModalBottomSheet(
                           shape: const RoundedRectangleBorder(
+
                             borderRadius: BorderRadius.only(
                               topLeft: Radius.circular(20),
                               topRight: Radius.circular(20),
@@ -85,6 +86,7 @@ class StudentList extends StatelessWidget {
                           context: context,
                           builder: ((context) {
                             return Column(
+
                               children: [
                                 Row(
                                   children: [
