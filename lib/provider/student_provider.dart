@@ -14,33 +14,7 @@ class StudentProvider extends ChangeNotifier {
   List<StudentModel> dataFound = [];
   File? image;
   bool imageVisible = false;
-  List<StudentModel> filterSearch = StudentDb().studentList;
-  void snackBar(dynamic context) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        duration: Duration(
-          seconds: 2,
-        ),
-        backgroundColor: Color.fromARGB(
-          255,
-          34,
-          104,
-          12,
-        ),
-        behavior: SnackBarBehavior.floating,
-        margin: EdgeInsets.all(
-          10,
-        ),
-        content: Text(
-          'Stundent Data Added',
-          style: TextStyle(
-            fontSize: 10,
-          ),
-        ),
-      ),
-    );
-    notifyListeners();
-  }
+  List<StudentModel> filterSearch = StudentDb.studentList;
 
   splsh(BuildContext context) async {
     Timer(
@@ -53,10 +27,11 @@ class StudentProvider extends ChangeNotifier {
         ),
       ),
     );
+    notifyListeners();
   }
 
   Future<void> getAllData(context) async {
-    final students = await StudentDb().getAllStudents();
+    final students = await StudentDb.getAllStudents();
     dataFound = students;
     notifyListeners();
   }
@@ -74,9 +49,9 @@ class StudentProvider extends ChangeNotifier {
     } else {
       results = filterSearch
           .where(
-            (element) => element.name.toLowerCase().contains(
-                  keyboard.toLowerCase(),
-                ),
+            (element) => element.name.contains(
+              keyboard,
+            ),
           )
           .toList();
     }

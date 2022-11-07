@@ -38,12 +38,14 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         theme: ThemeData(
-            useMaterial3: true,
-            appBarTheme: const AppBarTheme(
-              centerTitle: true,
-              foregroundColor: Colors.blue,
-              backgroundColor: Colors.white10,
-            )),
+          useMaterial3: true,
+          primarySwatch: Colors.green,
+          appBarTheme: const AppBarTheme(
+            centerTitle: true,
+            foregroundColor: Colors.black,
+            backgroundColor: Colors.white10,
+          ),
+        ),
         debugShowCheckedModeBanner: false,
         home: HomeScreen(),
       ),

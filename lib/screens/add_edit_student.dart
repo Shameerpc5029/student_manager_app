@@ -7,6 +7,7 @@ import 'package:student_manager/db/model/enum_class.dart';
 import 'package:student_manager/db/model/student_model.dart';
 import 'package:student_manager/provider/student_provider.dart';
 import 'package:student_manager/screens/home_screen.dart';
+import 'package:student_manager/widgets/style.dart';
 
 class AddStudent extends StatelessWidget {
   AddStudent({
@@ -61,16 +62,17 @@ class AddStudent extends StatelessWidget {
 
     imagePicker.imageVisible = false;
 
-    ///img
-    ///
-    ///
-
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          "Add Student Details",
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
-        ),
+        title: type == Actiontype.addScreen
+            ? const Text(
+                "Add Student Details",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+              )
+            : const Text(
+                "Edit Student Details",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+              ),
       ),
       body: ListView(
         children: [
@@ -83,47 +85,60 @@ class AddStudent extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Consumer<StudentProvider>(
-                      builder: (context, value, child) {
-                        return type == Actiontype.editScreen
-                            ? CircleAvatar(
-                                radius: 50,
-                                backgroundImage: FileImage(
-                                  File(
-                                    value.image?.path ?? image!,
-                                  ),
-                                ),
-                              )
-                            : value.image == null
-                                ? const CircleAvatar(
-                                    radius: 50,
-                                    backgroundImage: AssetImage(kImage),
-                                  )
-                                : CircleAvatar(
+                    Stack(
+                      alignment: AlignmentDirectional.bottomEnd,
+                      children: [
+                        Consumer<StudentProvider>(
+                          builder: (context, value, child) {
+                            return type == Actiontype.editScreen
+                                ? CircleAvatar(
                                     radius: 50,
                                     backgroundImage: FileImage(
-                                      File(value.image!.path),
+                                      File(
+                                        value.image?.path ?? image!,
+                                      ),
                                     ),
-                                  );
-                      },
+                                  )
+                                : value.image == null
+                                    ? const CircleAvatar(
+                                        radius: 50,
+                                        backgroundImage: AssetImage(
+                                          kImage,
+                                        ),
+                                      )
+                                    : CircleAvatar(
+                                        radius: 50,
+                                        child: CircleAvatar(
+                                          radius: 48,
+                                          backgroundImage: FileImage(
+                                            File(
+                                              value.image!.path,
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                          },
+                        ),
+                        InkWell(
+                          onTap: () {
+                            imagePicker.getimage();
+                          },
+                          child: const CircleAvatar(
+                            radius: 18,
+                            backgroundColor: Colors.white,
+                            child: CircleAvatar(
+                              radius: 16,
+                              child: Icon(
+                                Icons.add_photo_alternate_outlined,
+                                color: Colors.white,
+                                size: 18,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                    // (_file.path == 'img')
-                    //     ? const CircleAvatar(
-                    //         radius: 50,
-                    //         backgroundImage: AssetImage(
-                    //           'assets/images/student (2).png',
-                    //         ),
-                    //       )
-                    //     : CircleAvatar(
-                    //         backgroundImage: FileImage(_file),
-                    //         radius: 50,
-                    //       ),
-                    TextButton(
-                      onPressed: () {
-                        imagePicker.getimage();
-                      },
-                      child: const Text('Add Image'),
-                    ),
+                    height10,
                     Consumer<StudentProvider>(
                       builder: (context, value, child) {
                         return Visibility(
@@ -135,13 +150,11 @@ class AddStudent extends StatelessWidget {
                         );
                       },
                     ),
-                    const SizedBox(
-                      height: 30,
-                    ),
+                    height20,
                     TextFormField(
                       validator: ((value) {
                         if (value!.isEmpty) {
-                          return "Enter Full Name!";
+                          return "   Enter Student Full Name!";
                         } else {
                           return null;
                         }
@@ -149,9 +162,14 @@ class AddStudent extends StatelessWidget {
                       keyboardType: TextInputType.name,
                       controller: _nameController,
                       decoration: const InputDecoration(
+                        prefixIcon: Icon(Icons.person_outline_rounded),
                         labelText: 'Student Name',
-                        hintText: 'Enter name',
-                        border: OutlineInputBorder(),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(30),
+                          ),
+                        ),
+                        contentPadding: EdgeInsets.symmetric(vertical: 10),
                       ),
                     ),
                     const SizedBox(
@@ -160,7 +178,9 @@ class AddStudent extends StatelessWidget {
                     TextFormField(
                       validator: ((value) {
                         if (value!.isEmpty) {
-                          return "Enter Age!";
+                          return "   Enter Student Age!";
+                        } else if (value.length > 2) {
+                          return "   Enter Student Age Correct Format";
                         } else {
                           return null;
                         }
@@ -168,8 +188,14 @@ class AddStudent extends StatelessWidget {
                       keyboardType: TextInputType.number,
                       controller: _ageController,
                       decoration: const InputDecoration(
+                        prefixIcon: Icon(Icons.calendar_month_outlined),
                         labelText: 'Student Age',
-                        border: OutlineInputBorder(),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(30),
+                          ),
+                        ),
+                        contentPadding: EdgeInsets.symmetric(vertical: 10),
                       ),
                     ),
                     const SizedBox(
@@ -178,7 +204,9 @@ class AddStudent extends StatelessWidget {
                     TextFormField(
                       validator: ((value) {
                         if (value!.isEmpty) {
-                          return "Enter Parent's Mobile Number!";
+                          return "   Enter Parent's Mobile Number!";
+                        } else if (value.length != 10) {
+                          return "   Mobile number must be of 10 digit";
                         } else {
                           return null;
                         }
@@ -186,8 +214,15 @@ class AddStudent extends StatelessWidget {
                       keyboardType: TextInputType.number,
                       controller: _numberController,
                       decoration: const InputDecoration(
+                        prefixText: '+91 ',
+                        prefixIcon: Icon(Icons.phone_android_rounded),
                         labelText: "Parent's Mobile Number",
-                        border: OutlineInputBorder(),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(30),
+                          ),
+                        ),
+                        contentPadding: EdgeInsets.symmetric(vertical: 10),
                       ),
                     ),
                     const SizedBox(
@@ -196,7 +231,7 @@ class AddStudent extends StatelessWidget {
                     TextFormField(
                       validator: ((value) {
                         if (value!.isEmpty) {
-                          return "Enter Student Email";
+                          return "   Enter Student Email";
                         } else {
                           return null;
                         }
@@ -204,8 +239,15 @@ class AddStudent extends StatelessWidget {
                       keyboardType: TextInputType.emailAddress,
                       controller: _emailController,
                       decoration: const InputDecoration(
+                        prefixIcon: Icon(Icons.email_outlined),
+                        suffixText: '@gmail.com  ',
                         labelText: 'Student Email',
-                        border: OutlineInputBorder(),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(30),
+                          ),
+                        ),
+                        contentPadding: EdgeInsets.symmetric(vertical: 10),
                       ),
                     ),
                     Padding(
@@ -316,21 +358,6 @@ class AddStudent extends StatelessWidget {
         );
         Navigator.of(context).pop();
       }
-      // StudentDb().addStudent(
-      //   student,
-      // );
-
     }
   }
-
-  // uploadImage() async {
-  //   final ImagePicker picker = ImagePicker();
-  //   XFile? image = await picker.pickImage(source: ImageSource.gallery);
-  //   if (image != null) {
-  //     var selected = File(image.path);
-  //     // setState(() {
-  //     //   _file = selected;
-  //     // });
-  //   }
-  // }
 }

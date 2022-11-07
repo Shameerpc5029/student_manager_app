@@ -8,21 +8,12 @@ import 'package:student_manager/db/model/enum_class.dart';
 import 'package:student_manager/provider/student_provider.dart';
 import 'package:student_manager/screens/add_edit_student.dart';
 import 'package:student_manager/widgets/list_student.dart';
+import 'package:student_manager/widgets/style.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({Key? key}) : super(key: key);
 
-  // @override
-  // void initState() {
-  //   getAllStudents();
-  //   super.initState();
-  // }
-
   final searchController = TextEditingController();
-
-  // String query = '';
-
-  // List<StudentModel> studentSearchList = studentListNotifier.value.toList();
 
   @override
   Widget build(BuildContext context) {
@@ -36,22 +27,35 @@ class HomeScreen extends StatelessWidget {
     );
     return Scaffold(
       appBar: AppBar(
-        title: Consumer<StudentProvider>(
-          builder: (context, value, child) {
-            return CupertinoSearchTextField(
-              itemColor: Colors.black,
-              backgroundColor: Colors.white,
-              controller: searchController,
-              onChanged: (value) {
-                StudentProvider().search(value);
-              },
-            );
-          },
-        ),
-      ),
+          toolbarHeight: 100,
+          title: Column(
+            children: [
+              const Text(
+                'Student List',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+              ),
+              height10,
+              Consumer<StudentProvider>(
+                builder: (context, value, child) {
+                  return Padding(
+                    padding: const EdgeInsets.only(left: 10, right: 10),
+                    child: CupertinoSearchTextField(
+                      itemSize: 18,
+                      placeholder: 'Search Students',
+                      placeholderStyle: textStyle1,
+                      itemColor: Colors.grey,
+                      controller: searchController,
+                      onChanged: (result) {
+                        value.search(result);
+                      },
+                    ),
+                  );
+                },
+              ),
+            ],
+          )),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // context.read<StudentProvider>().image = null;
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -70,42 +74,6 @@ class HomeScreen extends StatelessWidget {
           physics: const ScrollPhysics(),
           child: Column(
             children: const [
-              // Padding(
-              //   padding: const EdgeInsets.all(20),
-
-              //   // child: TextFormField(
-              //   //   controller: searchController,
-              //   //   onChanged: ((value) {
-              //   //     final student =
-              //   //         studentListNotifier.value.where((element) {
-              //   //       final nameLower = element.name.toLowerCase();
-              //   //       final age = element.age.toLowerCase();
-              //   //       final search = value.toLowerCase();
-              //   //       return nameLower.contains(search) ||
-              //   //           age.contains(search);
-              //   //     }).toList();
-              //   //     setState(() {
-              //   //       query = value;
-              //   //       studentSearchList = student;
-              //   //     });
-              //   //   }),
-              //   //   decoration: InputDecoration(
-              //   //     contentPadding:
-              //   //         const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-              //   //     prefixIcon: const Icon(Icons.search),
-              //   //     hintText: 'Search Name & Age',
-              //   //     border: OutlineInputBorder(
-              //   //         borderRadius: BorderRadius.circular(50)),
-              //   //   ),
-              //   // ),
-              // ),
-              // if (studentList.isEmpty)
-              //   const Center(
-              //     child: Text(
-              //       'No items...',
-              //     ),
-              //   ),
-
               StudentList(),
             ],
           ),
