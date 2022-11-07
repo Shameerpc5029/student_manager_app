@@ -1,11 +1,13 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:student_manager/db/model/enum_class.dart';
-import 'package:student_manager/provider/student_provider.dart';
-import 'package:student_manager/screens/add_edit_student.dart';
-import 'package:student_manager/widgets/style.dart';
+import 'package:student_manager/Model/db/model/enum_class.dart';
+import 'package:student_manager/Controller/provider/student_provider.dart';
+import 'package:student_manager/View/Add%20And%20Edit%20Screen/add_edit_student.dart';
+import 'package:student_manager/View/widgets/snack_bar.dart';
+import 'package:student_manager/View/widgets/style.dart';
 
 class StudentList extends StatelessWidget {
   const StudentList({super.key});
@@ -86,14 +88,11 @@ class StudentList extends StatelessWidget {
                               children: [
                                 Row(
                                   children: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(left: 8.0),
-                                      child: TextButton(
-                                        onPressed: () {
-                                          Navigator.pop(context);
-                                        },
-                                        child: const Text('Cancel'),
-                                      ),
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: const Text('Cancel'),
                                     ),
                                   ],
                                 ),
@@ -102,8 +101,11 @@ class StudentList extends StatelessWidget {
                                   radius: 50,
                                   child: CircleAvatar(
                                     radius: 46,
-                                    backgroundImage:
-                                        FileImage(File(data.photo)),
+                                    backgroundImage: FileImage(
+                                      File(
+                                        data.photo,
+                                      ),
+                                    ),
                                   ),
                                 ),
                                 height20,
@@ -167,12 +169,17 @@ class StudentList extends StatelessWidget {
 }
 
 void onPressedDelete(BuildContext context, String index) {
-  showDialog(
+  showCupertinoModalPopup(
     context: context,
-    builder: (context) {
-      return AlertDialog(
-        title: const Text("Delete"),
-        content: const Text("Want to delete ?"),
+    builder: ((context) {
+      return CupertinoAlertDialog(
+        title: const Text(
+          "Delete Student?",
+          style: textStyle2,
+        ),
+        content: const Text(
+          "This student will be permanently deleted from this list.",
+        ),
         actions: [
           TextButton(
             onPressed: () {
@@ -182,14 +189,9 @@ void onPressedDelete(BuildContext context, String index) {
               );
               Provider.of<StudentProvider>(context, listen: false)
                   .getAllData(context);
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Successfully deleted !'),
-                  behavior: SnackBarBehavior.floating,
-                  duration: Duration(seconds: 1),
-                  backgroundColor: Colors.blue,
-                ),
-              );
+              CustomSnackBar()
+                  .snackBar(context, 'Successfully deleted!', Colors.red);
+
               Navigator.of(context).pop();
             },
             child: const Text('Ok'),
@@ -204,6 +206,6 @@ void onPressedDelete(BuildContext context, String index) {
           ),
         ],
       );
-    },
+    }),
   );
 }

@@ -2,12 +2,16 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:student_manager/db/functions/db_functions.dart';
-import 'package:student_manager/db/model/enum_class.dart';
-import 'package:student_manager/db/model/student_model.dart';
-import 'package:student_manager/provider/student_provider.dart';
-import 'package:student_manager/screens/home_screen.dart';
-import 'package:student_manager/widgets/style.dart';
+import 'package:student_manager/Model/db/functions/db_functions.dart';
+import 'package:student_manager/Model/db/model/enum_class.dart';
+import 'package:student_manager/Model/db/model/student_model.dart';
+
+import 'package:student_manager/Controller/provider/student_provider.dart';
+import 'package:student_manager/View/Add%20And%20Edit%20Screen/widgets/custom_text_form_fileld.dart';
+import 'package:student_manager/View/widgets/snack_bar.dart';
+
+import 'package:student_manager/View/Home%20Screen/home_screen.dart';
+import 'package:student_manager/View/widgets/style.dart';
 
 class AddStudent extends StatelessWidget {
   AddStudent({
@@ -30,11 +34,6 @@ class AddStudent extends StatelessWidget {
   final String? image;
   final int? index;
   final String? id;
-  // File _file = File("img");
-
-  // late PickedFile imageFile;
-
-  // final ImagePicker picker = ImagePicker();
 
   final _nameController = TextEditingController();
 
@@ -151,7 +150,8 @@ class AddStudent extends StatelessWidget {
                       },
                     ),
                     height20,
-                    TextFormField(
+                    CustomTextFormField(
+                      controller: _nameController,
                       validator: ((value) {
                         if (value!.isEmpty) {
                           return "   Enter Student Full Name!";
@@ -160,22 +160,14 @@ class AddStudent extends StatelessWidget {
                         }
                       }),
                       keyboardType: TextInputType.name,
-                      controller: _nameController,
-                      decoration: const InputDecoration(
-                        prefixIcon: Icon(Icons.person_outline_rounded),
-                        labelText: 'Student Name',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(30),
-                          ),
-                        ),
-                        contentPadding: EdgeInsets.symmetric(vertical: 10),
-                      ),
+                      prefixIcon: Icons.person_outline_rounded,
+                      labelText: 'Student Name',
                     ),
                     const SizedBox(
                       height: 10,
                     ),
-                    TextFormField(
+                    CustomTextFormField(
+                      controller: _ageController,
                       validator: ((value) {
                         if (value!.isEmpty) {
                           return "   Enter Student Age!";
@@ -186,22 +178,12 @@ class AddStudent extends StatelessWidget {
                         }
                       }),
                       keyboardType: TextInputType.number,
-                      controller: _ageController,
-                      decoration: const InputDecoration(
-                        prefixIcon: Icon(Icons.calendar_month_outlined),
-                        labelText: 'Student Age',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(30),
-                          ),
-                        ),
-                        contentPadding: EdgeInsets.symmetric(vertical: 10),
-                      ),
+                      prefixIcon: Icons.calendar_month_outlined,
+                      labelText: 'Student Age',
                     ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    TextFormField(
+                    height10,
+                    CustomTextFormField(
+                      controller: _numberController,
                       validator: ((value) {
                         if (value!.isEmpty) {
                           return "   Enter Parent's Mobile Number!";
@@ -212,23 +194,13 @@ class AddStudent extends StatelessWidget {
                         }
                       }),
                       keyboardType: TextInputType.number,
-                      controller: _numberController,
-                      decoration: const InputDecoration(
-                        prefixText: '+91 ',
-                        prefixIcon: Icon(Icons.phone_android_rounded),
-                        labelText: "Parent's Mobile Number",
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(30),
-                          ),
-                        ),
-                        contentPadding: EdgeInsets.symmetric(vertical: 10),
-                      ),
+                      prefixIcon: Icons.phone_android_rounded,
+                      labelText: "Parent's Mobile Number",
+                      prefixText: '+91 ',
                     ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    TextFormField(
+                    height10,
+                    CustomTextFormField(
+                      controller: _emailController,
                       validator: ((value) {
                         if (value!.isEmpty) {
                           return "   Enter Student Email";
@@ -237,56 +209,42 @@ class AddStudent extends StatelessWidget {
                         }
                       }),
                       keyboardType: TextInputType.emailAddress,
-                      controller: _emailController,
-                      decoration: const InputDecoration(
-                        prefixIcon: Icon(Icons.email_outlined),
-                        suffixText: '@gmail.com  ',
-                        labelText: 'Student Email',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(30),
-                          ),
-                        ),
-                        contentPadding: EdgeInsets.symmetric(vertical: 10),
-                      ),
+                      prefixIcon: Icons.email_outlined,
+                      labelText: 'Student Email',
+                      suffixText: '@gmail.com  ',
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(
-                        8.0,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          ElevatedButton.icon(
-                            onPressed: () {
-                              if (type == Actiontype.addScreen) {
-                                if (formKey.currentState!.validate() &&
-                                    imagePicker.image != null) {
-                                  addButtonCicked(context);
-                                  imagePicker.imageVisible = false;
-                                } else {
-                                  if (imagePicker.image != null) {
-                                    imagePicker.isVisible(imagePicker.image);
-                                  } else {
-                                    imagePicker.isVisible(imagePicker.image);
-                                  }
-                                }
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        ElevatedButton.icon(
+                          onPressed: () {
+                            if (type == Actiontype.addScreen) {
+                              if (formKey.currentState!.validate() &&
+                                  imagePicker.image != null) {
+                                addButtonCicked(context);
+                                imagePicker.imageVisible = false;
                               } else {
-                                if (formKey.currentState!.validate()) {
-                                  addButtonCicked(context);
-                                  imagePicker.imageVisible = false;
+                                if (imagePicker.image != null) {
+                                  imagePicker.isVisible(imagePicker.image);
+                                } else {
+                                  imagePicker.isVisible(imagePicker.image);
                                 }
                               }
-                            },
-                            icon: const Icon(
-                              Icons.check,
-                            ),
-                            label: const Text(
-                              'Add',
-                            ),
+                            } else {
+                              if (formKey.currentState!.validate()) {
+                                addButtonCicked(context);
+                                imagePicker.imageVisible = false;
+                              }
+                            }
+                          },
+                          icon: const Icon(
+                            Icons.check,
                           ),
-                        ],
-                      ),
+                          label: const Text(
+                            'Add',
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -337,27 +295,27 @@ class AddStudent extends StatelessWidget {
           },
         ), (route) => false);
 
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Successfully edited records'),
-            behavior: SnackBarBehavior.floating,
-            duration: Duration(seconds: 1),
-            backgroundColor: Colors.blue,
-          ),
-        );
+        CustomSnackBar()
+            .snackBar(context, 'Successfully edited records', Colors.blue);
       } else {
         Provider.of<StudentProvider>(context, listen: false)
             .getAllData(context);
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Successfully added'),
-            behavior: SnackBarBehavior.floating,
-            duration: Duration(seconds: 1),
-            backgroundColor: Colors.blue,
-          ),
-        );
+
+        CustomSnackBar().snackBar(context, 'Successfully added', Colors.green);
+
         Navigator.of(context).pop();
       }
     }
   }
+}
+
+void snackBar(context, String text) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: Text(text),
+      behavior: SnackBarBehavior.floating,
+      duration: const Duration(seconds: 1),
+      backgroundColor: Colors.blue,
+    ),
+  );
 }

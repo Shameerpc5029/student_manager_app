@@ -1,15 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
-import 'package:student_manager/provider/student_provider.dart';
+import 'package:student_manager/Controller/provider/student_provider.dart';
 class SplashSreen extends StatelessWidget {
   const SplashSreen({Key? key}) : super(key: key);
 
-  //@override
-  // void initState() {
-  //   gotoHome();
-  //   super.initState();
-  // }
 
   @override
   Widget build(BuildContext context) {

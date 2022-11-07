@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:student_manager/db/model/student_model.dart';
+import 'package:student_manager/Model/db/model/student_model.dart';
 
 // ValueNotifier<List<StudentModel>> studentListNotifier = ValueNotifier([]);
 class StudentDb with ChangeNotifier {
- static List<StudentModel> studentList = [];
+  static List<StudentModel> studentList = [];
 
   Future<void> addStudent(StudentModel value) async {
     final studnetDb = await Hive.openBox<StudentModel>('Student_db');
@@ -16,7 +16,7 @@ class StudentDb with ChangeNotifier {
     getAllStudents();
   }
 
- static Future<List<StudentModel>> getAllStudents() async {
+  static Future<List<StudentModel>> getAllStudents() async {
     final studnetDb = await Hive.openBox<StudentModel>('student_DB');
     studentList.clear();
     studentList.addAll(studnetDb.values);
