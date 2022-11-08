@@ -73,185 +73,181 @@ class AddStudent extends StatelessWidget {
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
               ),
       ),
-      body: ListView(
-        children: [
-          Center(
-            child: Padding(
-              padding: const EdgeInsets.all(20),
-              child: Form(
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                key: formKey,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Stack(
-                      alignment: AlignmentDirectional.bottomEnd,
-                      children: [
-                        Consumer<StudentProvider>(
-                          builder: (context, value, child) {
-                            return type == Actiontype.editScreen
-                                ? CircleAvatar(
-                                    radius: 50,
-                                    backgroundImage: FileImage(
-                                      File(
-                                        value.image?.path ?? image!,
-                                      ),
+      body: Center(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(40),
+            child: Form(
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+              key: formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Stack(
+                    alignment: AlignmentDirectional.bottomEnd,
+                    children: [
+                      Consumer<StudentProvider>(
+                        builder: (context, value, child) {
+                          return type == Actiontype.editScreen
+                              ? CircleAvatar(
+                                  radius: 50,
+                                  backgroundImage: FileImage(
+                                    File(
+                                      value.image?.path ?? image!,
                                     ),
-                                  )
-                                : value.image == null
-                                    ? const CircleAvatar(
-                                        radius: 50,
-                                        backgroundImage: AssetImage(
-                                          kImage,
-                                        ),
-                                      )
-                                    : CircleAvatar(
-                                        radius: 50,
-                                        child: CircleAvatar(
-                                          radius: 48,
-                                          backgroundImage: FileImage(
-                                            File(
-                                              value.image!.path,
-                                            ),
+                                  ),
+                                )
+                              : value.image == null
+                                  ? const CircleAvatar(
+                                      radius: 50,
+                                      backgroundImage: AssetImage(
+                                        kImage,
+                                      ),
+                                    )
+                                  : CircleAvatar(
+                                      radius: 50,
+                                      child: CircleAvatar(
+                                        radius: 48,
+                                        backgroundImage: FileImage(
+                                          File(
+                                            value.image!.path,
                                           ),
                                         ),
-                                      );
-                          },
-                        ),
-                        InkWell(
-                          onTap: () {
-                            imagePicker.getimage();
-                          },
-                          child: const CircleAvatar(
-                            radius: 18,
-                            backgroundColor: Colors.white,
-                            child: CircleAvatar(
-                              radius: 16,
-                              child: Icon(
-                                Icons.add_photo_alternate_outlined,
-                                color: Colors.white,
-                                size: 18,
-                              ),
+                                      ),
+                                    );
+                        },
+                      ),
+                      InkWell(
+                        onTap: () {
+                          imagePicker.getimage();
+                        },
+                        child: const CircleAvatar(
+                          radius: 18,
+                          backgroundColor: Colors.white,
+                          child: CircleAvatar(
+                            radius: 16,
+                            child: Icon(
+                              Icons.add_photo_alternate_outlined,
+                              color: Colors.white,
+                              size: 18,
                             ),
                           ),
                         ),
-                      ],
-                    ),
-                    height10,
-                    Consumer<StudentProvider>(
-                      builder: (context, value, child) {
-                        return Visibility(
-                          visible: value.imageVisible,
-                          child: const Text(
-                            'Add Image!',
-                            style: TextStyle(color: Colors.red),
-                          ),
-                        );
-                      },
-                    ),
-                    height20,
-                    CustomTextFormField(
-                      controller: _nameController,
-                      validator: ((value) {
-                        if (value!.isEmpty) {
-                          return "   Enter Student Full Name!";
-                        } else {
-                          return null;
-                        }
-                      }),
-                      keyboardType: TextInputType.name,
-                      prefixIcon: Icons.person_outline_rounded,
-                      labelText: 'Student Name',
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    CustomTextFormField(
-                      controller: _ageController,
-                      validator: ((value) {
-                        if (value!.isEmpty) {
-                          return "   Enter Student Age!";
-                        } else if (value.length > 2) {
-                          return "   Enter Student Age Correct Format";
-                        } else {
-                          return null;
-                        }
-                      }),
-                      keyboardType: TextInputType.number,
-                      prefixIcon: Icons.calendar_month_outlined,
-                      labelText: 'Student Age',
-                    ),
-                    height10,
-                    CustomTextFormField(
-                      controller: _numberController,
-                      validator: ((value) {
-                        if (value!.isEmpty) {
-                          return "   Enter Parent's Mobile Number!";
-                        } else if (value.length != 10) {
-                          return "   Mobile number must be of 10 digit";
-                        } else {
-                          return null;
-                        }
-                      }),
-                      keyboardType: TextInputType.number,
-                      prefixIcon: Icons.phone_android_rounded,
-                      labelText: "Parent's Mobile Number",
-                      prefixText: '+91 ',
-                    ),
-                    height10,
-                    CustomTextFormField(
-                      controller: _emailController,
-                      validator: ((value) {
-                        if (value!.isEmpty) {
-                          return "   Enter Student Email";
-                        } else {
-                          return null;
-                        }
-                      }),
-                      keyboardType: TextInputType.emailAddress,
-                      prefixIcon: Icons.email_outlined,
-                      labelText: 'Student Email',
-                      suffixText: '@gmail.com  ',
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        ElevatedButton.icon(
-                          onPressed: () {
-                            if (type == Actiontype.addScreen) {
-                              if (formKey.currentState!.validate() &&
-                                  imagePicker.image != null) {
-                                addButtonCicked(context);
-                                imagePicker.imageVisible = false;
-                              } else {
-                                if (imagePicker.image != null) {
-                                  imagePicker.isVisible(imagePicker.image);
-                                } else {
-                                  imagePicker.isVisible(imagePicker.image);
-                                }
-                              }
+                      ),
+                    ],
+                  ),
+                  height10,
+                  Consumer<StudentProvider>(
+                    builder: (context, value, child) {
+                      return Visibility(
+                        visible: value.imageVisible,
+                        child: const Text(
+                          'Add Image!',
+                          style: TextStyle(color: Colors.red),
+                        ),
+                      );
+                    },
+                  ),
+                  height20,
+                  CustomTextFormField(
+                    controller: _nameController,
+                    validator: ((value) {
+                      if (value!.isEmpty) {
+                        return "   Enter Student Full Name!";
+                      } else {
+                        return null;
+                      }
+                    }),
+                    keyboardType: TextInputType.name,
+                    prefixIcon: Icons.person_outline_rounded,
+                    labelText: 'Student Name',
+                  ),
+                  height20,
+                  CustomTextFormField(
+                    controller: _ageController,
+                    validator: ((value) {
+                      if (value!.isEmpty) {
+                        return "   Enter Student Age!";
+                      } else if (value.length > 2) {
+                        return "   Enter Student Age Correct Format";
+                      } else {
+                        return null;
+                      }
+                    }),
+                    keyboardType: TextInputType.number,
+                    prefixIcon: Icons.calendar_month_outlined,
+                    labelText: 'Student Age',
+                  ),
+                  height20,
+                  CustomTextFormField(
+                    controller: _numberController,
+                    validator: ((value) {
+                      if (value!.isEmpty) {
+                        return "   Enter Parent's Mobile Number!";
+                      } else if (value.length != 10) {
+                        return "   Mobile number must be of 10 digit";
+                      } else {
+                        return null;
+                      }
+                    }),
+                    keyboardType: TextInputType.number,
+                    prefixIcon: Icons.phone_android_rounded,
+                    labelText: "Parent's Mobile Number",
+                    prefixText: '+91 ',
+                  ),
+                  height20,
+                  CustomTextFormField(
+                    controller: _emailController,
+                    validator: ((value) {
+                      if (value!.isEmpty) {
+                        return "   Enter Student Email";
+                      } else {
+                        return null;
+                      }
+                    }),
+                    keyboardType: TextInputType.emailAddress,
+                    prefixIcon: Icons.email_outlined,
+                    labelText: 'Student Email',
+                    suffixText: '@gmail.com  ',
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      ElevatedButton.icon(
+                        onPressed: () {
+                          if (type == Actiontype.addScreen) {
+                            if (formKey.currentState!.validate() &&
+                                imagePicker.image != null) {
+                              addButtonCicked(context);
+                              imagePicker.imageVisible = false;
                             } else {
-                              if (formKey.currentState!.validate()) {
-                                addButtonCicked(context);
-                                imagePicker.imageVisible = false;
+                              if (imagePicker.image != null) {
+                                imagePicker.isVisible(imagePicker.image);
+                              } else {
+                                imagePicker.isVisible(imagePicker.image);
                               }
                             }
-                          },
-                          icon: const Icon(
-                            Icons.check,
-                          ),
-                          label: const Text(
-                            'Add',
-                          ),
+                          } else {
+                            if (formKey.currentState!.validate()) {
+                              addButtonCicked(context);
+                              imagePicker.imageVisible = false;
+                            }
+                          }
+                        },
+                        icon: const Icon(
+                          Icons.check,
                         ),
-                      ],
-                    ),
-                  ],
-                ),
+                        label: const Text(
+                          'Add',
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
           ),
-        ],
+        ),
       ),
     );
   }

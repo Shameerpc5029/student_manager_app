@@ -21,6 +21,7 @@ class HomeScreen extends StatelessWidget {
     WidgetsBinding.instance.addPostFrameCallback(
       (_) {
         studentProvider.getAllData(context);
+
         log("message");
       },
     );
@@ -36,18 +37,15 @@ class HomeScreen extends StatelessWidget {
             height10,
             Consumer<StudentProvider>(
               builder: (context, value, child) {
-                return Padding(
-                  padding: const EdgeInsets.only(left: 10, right: 10),
-                  child: CupertinoSearchTextField(
-                    itemSize: 18,
-                    placeholder: 'Search Students',
-                    placeholderStyle: textStyle1,
-                    itemColor: Colors.grey,
-                    controller: searchController,
-                    onChanged: (result) {
-                      value.search(result);
-                    },
-                  ),
+                return CupertinoSearchTextField(
+                  itemSize: 18,
+                  placeholder: 'Search Students',
+                  placeholderStyle: textStyle1,
+                  itemColor: Colors.grey,
+                  controller: searchController,
+                  onChanged: (result) {
+                    value.search(result);
+                  },
                 );
               },
             ),
@@ -70,13 +68,14 @@ class HomeScreen extends StatelessWidget {
         ),
       ),
       body: SafeArea(
-        child: SingleChildScrollView(
-          physics: const ScrollPhysics(),
-          child: Column(
-            children: const [
-              StudentList(),
-            ],
-          ),
+        child: ListView(
+          children: [
+            Column(
+              children: const [
+                StudentList(),
+              ],
+            ),
+          ],
         ),
       ),
     );
